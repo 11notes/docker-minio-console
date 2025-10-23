@@ -1,0 +1,25 @@
+{
+  "image": "11notes/minio-console",
+  "name": "minio-console",
+  "root": "/minio-console",
+  "semver": {
+    "version": "1.8.1"
+  },
+  "readme": {
+    "description": "Run minio-console rootless and distroless.",
+    "introduction": "[MinIO Console](https://github.com/huncrys/minio-console) (created by [huncrys](https://github.com/huncrys/)) is a library that provides a management and browser UI overlay for the MinIO Server.",
+    "built": {
+      "huncrys/minio-console": "https://github.com/huncrys/minio-console"
+    },
+    "distroless": {
+      "layers": [
+        "11notes/distroless",
+        "11notes/distroless:localhealth",
+        "11notes/distroless:mc"
+      ]
+    },
+    "comparison": {
+      "images": ["ghcr.io/huncrys/minio-console"]
+    }
+  }
+}
