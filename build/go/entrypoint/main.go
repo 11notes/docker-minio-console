@@ -4,13 +4,15 @@ import (
 	"os"
 	"strings"
 	"syscall"
+	"time"
+	"crypto/sha256"
+	"fmt"
 
 	"github.com/11notes/go"
 )
 
 const BIN_MC string = "/usr/local/bin/mc"
 const BIN string = "/usr/local/bin/console"
-const ROOT_SSL string = "/minio-console/ssl"
 
 var(
 	Eleven eleven.New = eleven.New{}
@@ -46,12 +48,19 @@ func mc(cmd string){
 	}
 }
 
+func random() string{
+	h := sha256.New()
+	h.Write([]byte(time.Now().Format(time.RFC3339)))
+	bs := h.Sum(nil)
+	return fmt.Sprintf("%x", bs)
+}
+
 func main() {
 	setup()
 	env := append(
 		os.Environ(),
-		"CONSOLE_PBKDF_PASSPHRASE=547b354743n74573457bn34573457b43v57",
-		"CONSOLE_PBKDF_SALT=3245v3245325v324523453",
+		"CONSOLE_PBKDF_PASSPHRASE=" + random(),
+		"CONSOLE_PBKDF_SALT=" + random(),
 		"CONSOLE_MINIO_SERVER=" + os.Getenv("MINIO_CONSOLE_MINIO_URL"),
 	)
 	if err := syscall.Exec(BIN, []string{"console", "server", "--certs-dir", "/minio-console/ssl"}, env); err != nil {
