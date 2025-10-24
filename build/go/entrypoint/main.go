@@ -26,14 +26,14 @@ func setup(){
 
 	_, err = Eleven.Util.Run(BIN_MC, []string{"alias", "set", "minio", os.Getenv("MINIO_CONSOLE_MINIO_URL"), os.Getenv("MINIO_CONSOLE_MINIO_USER"), password})
 	if err != nil{
-		Eleven.LogFatal("alias failed: %v", err)
+		Eleven.LogFatal("alias failed: %v with params %s %s %s", err, os.Getenv("MINIO_CONSOLE_MINIO_URL"), os.Getenv("MINIO_CONSOLE_MINIO_USER"), password)
 	}else{
-		password, err := Eleven.Container.GetSecret("MINIO_CONSOLE_PASSWORD", "MINIO_CONSOLE_PASSWORD_FILE")
+		passwordConsole, err := Eleven.Container.GetSecret("MINIO_CONSOLE_PASSWORD", "MINIO_CONSOLE_PASSWORD_FILE")
 		if err != nil {
 			Eleven.LogFatal("you must set MINIO_CONSOLE_PASSWORD or MINIO_CONSOLE_PASSWORD_FILE!")
 		}
 
-		mc("admin user add minio " + os.Getenv("MINIO_CONSOLE_USER") + " " + password)
+		mc("admin user add minio " + os.Getenv("MINIO_CONSOLE_USER") + " " + passwordConsole)
 		mc("admin policy create minio " + os.Getenv("MINIO_CONSOLE_POLICY_NAME") + " /minio-console/etc/policy." + os.Getenv("MINIO_CONSOLE_POLICY") + ".json")
 		mc("admin policy attach minio " + os.Getenv("MINIO_CONSOLE_POLICY_NAME") + " --user=" + os.Getenv("MINIO_CONSOLE_USER"))
 	}
