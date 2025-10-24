@@ -21,16 +21,16 @@ var(
 func setup(){
 	password, err := Eleven.Container.GetSecret("MINIO_CONSOLE_MINIO_PASSWORD", "MINIO_CONSOLE_MINIO_PASSWORD_FILE")
 	if err != nil {
-		Eleven.LogFatal("ERR", "you must set MINIO_CONSOLE_MINIO_PASSWORD or MINIO_CONSOLE_MINIO_PASSWORD_FILE!")
+		Eleven.LogFatal("you must set MINIO_CONSOLE_MINIO_PASSWORD or MINIO_CONSOLE_MINIO_PASSWORD_FILE!")
 	}
 
 	_, err = Eleven.Util.Run(BIN_MC, []string{"alias", "set", "minio", os.Getenv("MINIO_CONSOLE_MINIO_URL"), os.Getenv("MINIO_CONSOLE_MINIO_USER"), password})
 	if err != nil{
-		Eleven.LogFatal("ERR", "alias failed: %v", err)
+		Eleven.LogFatal("alias failed: %v", err)
 	}else{
 		password, err := Eleven.Container.GetSecret("MINIO_CONSOLE_PASSWORD", "MINIO_CONSOLE_PASSWORD_FILE")
 		if err != nil {
-			Eleven.LogFatal("ERR", "you must set MINIO_CONSOLE_PASSWORD or MINIO_CONSOLE_PASSWORD_FILE!")
+			Eleven.LogFatal("you must set MINIO_CONSOLE_PASSWORD or MINIO_CONSOLE_PASSWORD_FILE!")
 		}
 
 		mc("admin user add minio " + os.Getenv("MINIO_CONSOLE_USER") + " " + password)
@@ -42,7 +42,7 @@ func setup(){
 func mc(cmd string){
 	out, err := Eleven.Util.Run(BIN_MC, strings.Split(cmd, " "))
 	if err != nil{
-		Eleven.LogFatal("ERR", "command failed: %v", err)
+		Eleven.LogFatal("command failed: %v", err)
 	}else{
 		Eleven.Log("INF", "%s", strings.TrimRight(out, "\r\n"))
 	}
